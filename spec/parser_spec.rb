@@ -30,5 +30,13 @@ RSpec.describe F1SalesCustom::Email::Parser do
     it 'contains email' do
       expect(parsed_email[:customer][:email]).to eq('teste@teste.com.br')
     end
+
+    it 'contains product' do
+      expect(parsed_email[:product]).to eq('Renault Stepway 1.6 8v ano 2014 em Blumenau/SC')
+    end
+
+    it 'contains message' do
+      expect(parsed_email[:message]).to eq('Tenho interesse no')
+    end
   end
 end
