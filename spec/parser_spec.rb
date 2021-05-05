@@ -3,6 +3,30 @@ require "f1sales_custom/parser"
 require "f1sales_custom/source"
 
 RSpec.describe F1SalesCustom::Email::Parser do
+  context 'when is about new vechicle' do
+    let(:email){
+      email = OpenStruct.new
+      email.to = [email: 'website@liberte.f1sales.net']
+      email.subject = 'TENHO INTERESSE - Marcio Teste'
+      email.body = "<http://liberte.com.br/>\nTENHO INTERESSE - Marcio Teste\n\nNome: Marcio Teste\nE-mail: marcio@teste.com.br\nTelefone: (11) 99999-9999\nModelo: CAPTUR\nLoja: Itajaí\nMensagem: Lead teste"
+      email
+    }
+
+    let(:parsed_email) { described_class.new(email).parse }
+
+    it 'contains lead website a new source name' do
+      expect(parsed_email[:source][:name]).to eq('Website - Novos - Itajaí')
+    end
+
+    it 'contains name' do
+      expect(parsed_email[:customer][:name]).to eq('Marcio Teste')
+    end
+
+    it 'contains product' do
+      expect(parsed_email[:product]).to eq('CAPTUR')
+    end
+  end
+
   context 'when is about used vechicle' do
     let(:email){
       email = OpenStruct.new

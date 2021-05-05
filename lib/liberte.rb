@@ -12,6 +12,10 @@ module Liberte
         {
           email_id: 'website',
           name: 'Website - Seminovos'
+        },
+        {
+          email_id: 'website',
+          name: 'Website - Novos'
         }
       ]
     end
@@ -22,8 +26,12 @@ module Liberte
   end
   class F1SalesCustom::Email::Parser
     def parse
-      parsed_email = @email.body.colons_to_hash(/(Telefone|Nome|E-mail|Mensagem|veículo|&raquo;).*?:/, false)
-      source_name = F1SalesCustom::Email::Source.all[0][:name]
+      parsed_email = @email.body.colons_to_hash(/(Telefone|Nome|Loja|Modelo|E-mail|Mensagem|veículo|&raquo;).*?:/, false)
+      vechicle = (parsed_email['veculo'] || parsed_email['modelo'] || '').split("\n").first
+      store_name = parsed_email['loja']
+
+      sources = F1SalesCustom::Email::Source.all
+      source_name = store_name ? "#{sources[1][:name]} - #{store_name}" : sources[0][:name]
 
       {
         source: {
@@ -34,7 +42,7 @@ module Liberte
           phone: parsed_email['telefone'].tr('^0-9', ''),
           email: parsed_email['email']
         },
-        product: (parsed_email['veculo'] || '').split("\n").first.strip,
+        product: vechicle.strip,
         description: '',
         message: parsed_email['mensagem']
       }
