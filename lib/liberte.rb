@@ -20,10 +20,11 @@ module Liberte
       ]
     end
 
-    def self.support?(_email_id)
-      true
+    def self.support?(email_id)
+      email_id == 'website'
     end
   end
+  
   class F1SalesCustom::Email::Parser
     def parse
       parsed_email = @email.body.colons_to_hash(/(Telefone|Nome|Loja|Modelo|E-mail|Mensagem|veículo|&raquo;).*?:/, false)
