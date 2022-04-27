@@ -20,8 +20,8 @@ module Liberte
       ]
     end
 
-    def self.support?(_email_id)
-      true if _email_id == 'website'
+    def self.support?(email_id)
+      email_id == 'website'
     end
   end
   
